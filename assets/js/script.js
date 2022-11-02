@@ -31,11 +31,14 @@ function preload() {
   this.load.image("sky", "./assets/img/sky.png");
   this.load.image("ground", "./assets/img/platform.png");
   this.load.image("ground2", "./assets/img/platform2.png");
-  this.load.image("item", "./assets/img/item.png");
+  this.load.spritesheet("item", "./assets/img/ring-sprite.png", {
+    frameWidth: 115,
+    frameHeight: 115,
+  });
   this.load.image("bomb", "./assets/img/bomb.png");
-  this.load.spritesheet("dude", "./assets/img/dude.png", {
-    frameWidth: 32,
-    frameHeight: 48,
+  this.load.spritesheet("dude", "./assets/img/sonic.png", {
+    frameWidth: 102,
+    frameHeight: 122,
   });
 }
 
@@ -54,11 +57,10 @@ function create() {
 
   //  Now let's create some ledges
   platforms.create(1080, 800, "ground");
-
   platforms2.create(1080, 590, "ground2");
 
   // The player and its settings
-  player = this.physics.add.sprite(100, 450, "dude");
+  player = this.physics.add.sprite(100, 450, "dude").setScale(1.2);
 
   //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
@@ -67,20 +69,20 @@ function create() {
   //  Our player animations, turning, walking left and walking right.
   this.anims.create({
     key: "left",
-    frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+    frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 13 }),
     frameRate: 10,
     repeat: -1,
   });
 
   this.anims.create({
     key: "turn",
-    frames: [{ key: "dude", frame: 4 }],
+    frames: [{ key: "dude", frame: 0 }],
     frameRate: 20,
   });
 
   this.anims.create({
     key: "right",
-    frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+    frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 13 }),
     frameRate: 10,
     repeat: -1,
   });
@@ -89,6 +91,7 @@ function create() {
   cursors = this.input.keyboard.createCursorKeys();
 
   //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+
   items = this.physics.add.group({
     key: "item",
     repeat: 11,
@@ -98,6 +101,7 @@ function create() {
   items.children.iterate(function (child) {
     //  Give each star a slightly different bounce
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    child.setScale(0.5);
   });
 
   bombs = this.physics.add.group();
@@ -117,6 +121,12 @@ function create() {
   this.physics.add.overlap(player, items, collectItems, null, this);
 
   this.physics.add.collider(player, bombs, hitBomb, null, this);
+
+  this.anims.create({
+    key: "itemAnim",
+    frames: this.anims.generateFrameNumbers("item", { start: 0, end: 9 }),
+    repeat: -1,
+  });
 }
 
 function update() {
@@ -141,6 +151,11 @@ function update() {
   if (cursors.up.isDown && player.body.touching.down) {
     player.setVelocityY(-330);
   }
+
+  items.children.iterate(function(child){
+    child.anims.play('itemAnim', true)
+})
+
 }
 
 function collectItems(player, item) {
