@@ -1,6 +1,6 @@
 var config = {
   type: Phaser.AUTO,
-  width: 1200,
+  width: 1195,
   height: 900,
   physics: {
     default: "arcade",
@@ -26,6 +26,7 @@ var ring;
 var score = 0;
 var scoreText;
 var dropItem;
+var lossItem;
 var gameOver = false;
 
 var game = new Phaser.Game(config);
@@ -45,6 +46,7 @@ function preload() {
     frameHeight: 95,
   });
   this.load.audio("dropItem", "./assets/sound/soundRing.mp3");
+  this.load.audio("lossItem", "./assets/sound/lossRing.mp3");
 }
 
 // crée les les éléments à afficher
@@ -110,7 +112,7 @@ function create() {
   });
 
   // crée le retangle d'apparition des items
-  const rect = new Phaser.Geom.Rectangle(0, 0, 1500, 600);
+  const rect = new Phaser.Geom.Rectangle(0, 0, 1500, 200);
 
   // apparition des items dans le rectangle
   Phaser.Actions.RandomRectangle(items.getChildren(), rect);
@@ -150,6 +152,7 @@ function create() {
 
   // crée la musique au ramassage
   dropItem = this.sound.add("dropItem");
+  lossItem = this.sound.add("lossItem");
 }
 
 // crée les événements
@@ -220,19 +223,31 @@ function collectItems(player, item) {
     bomb.allowGravity = false;
   }
 }
-
 // fonction qui fait perdre quand on touche une bombe
 function hitBomb(player, bomb) {
-  this.physics.pause();
+  bomb.disableBody(true, true);
+  score -= 10;
+  if (score > 0 ) {
+    lossItem.play();
+    scoreText.setText("Score:" + score);
+  } 
 
-  player.setTint(0xff0000);
+  else if(score<=0){
+    score = 0
+    lossItem.play();
+    scoreText.setText("Score:" + score);
 
-  player.anims.play("dead");
+    this.physics.pause();
 
-  gameOverText = this.add.text(320, 400, "Game Over", {
-    fontSize: "100px",
-    fill: "aliceblue",
-  });
+    player.setTint(0xff0000);
 
-  gameOver = true;
+    player.anims.play("dead");
+
+    gameOverText = this.add.text(320, 400, "Game Over", {
+      fontSize: "100px",
+      fill: "aliceblue",
+    });
+
+    gameOver = true;
+  }
 }
