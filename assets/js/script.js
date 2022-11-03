@@ -230,6 +230,18 @@ function hitBomb(player, bomb) {
   if (score > 0 ) {
     lossItem.play();
     scoreText.setText("Score:" + score);
+    var x =
+      player.x < 400
+        ? Phaser.Math.Between(400, 800)
+        : Phaser.Math.Between(0, 400);
+
+    // définit les propriétés de la bombe
+    var bomb = bombs.create(x, 16, "bomb");
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-100, 100), 20);
+    bomb.setScale(0.05);
+    bomb.allowGravity = false;
   } 
 
   else if(score<=0){
