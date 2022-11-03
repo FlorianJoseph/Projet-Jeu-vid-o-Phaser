@@ -1,7 +1,10 @@
+const contour = document.querySelector(".contour-jeu");
+
 var config = {
   type: Phaser.AUTO,
   width: 1195,
   height: 900,
+  parent: contour,
   physics: {
     default: "arcade",
     arcade: {
@@ -16,6 +19,8 @@ var config = {
   },
 };
 
+var game = new Phaser.Game(config);
+
 var player;
 var items;
 var bombs;
@@ -23,13 +28,12 @@ var platforms;
 var plate;
 var cursors;
 var ring;
+var scoreFinal = 0;
 var score = 0;
 var scoreText;
 var dropItem;
 var lossItem;
 var gameOver = false;
-
-var game = new Phaser.Game(config);
 
 // précharge les éléments
 function preload() {
@@ -112,7 +116,7 @@ function create() {
   });
 
   // crée le retangle d'apparition des items
-  const rect = new Phaser.Geom.Rectangle(0, 0, 1500, 200);
+  const rect = new Phaser.Geom.Rectangle(0, 0, 1500, 0);
 
   // apparition des items dans le rectangle
   Phaser.Actions.RandomRectangle(items.getChildren(), rect);
@@ -133,12 +137,12 @@ function create() {
   bombs = this.physics.add.group();
 
   //  Affiche le score avec un item au bout
-  scoreText = this.add.text(16, 16, "Score:0", {
+  scoreText = this.add.text(50, 50, "Rings:0", {
     fontSize: "40px",
     fill: "aliceblue",
   });
 
-  item = this.add.sprite(260, 33, "item").setScale(0.3);
+  item = this.add.sprite(285, 68, "item").setScale(0.3);
 
   // crée les collisions
   this.physics.add.collider(items, plateforme);
@@ -200,7 +204,8 @@ function collectItems(player, item) {
 
   // monte le score et l'affiche
   score += 1;
-  scoreText.setText("Score:" + score);
+  scoreFinal += 10;
+  scoreText.setText("Rings:" + score);
 
   if (items.countActive(true) === 0) {
     // faire disparaitre les items au ramassage
@@ -227,9 +232,9 @@ function collectItems(player, item) {
 function hitBomb(player, bomb) {
   bomb.disableBody(true, true);
   score -= 10;
-  if (score > 0 ) {
+  if (score > 0) {
     lossItem.play();
-    scoreText.setText("Score:" + score);
+    scoreText.setText("Rings:" + score);
     var x =
       player.x < 400
         ? Phaser.Math.Between(400, 800)
@@ -242,12 +247,10 @@ function hitBomb(player, bomb) {
     bomb.setVelocity(Phaser.Math.Between(-100, 100), 20);
     bomb.setScale(0.05);
     bomb.allowGravity = false;
-  } 
-
-  else if(score<=0){
-    score = 0
+  } else if (score <= 0) {
+    score = 0;
     lossItem.play();
-    scoreText.setText("Score:" + score);
+    scoreText.setText("Rings:" + score);
 
     this.physics.pause();
 
@@ -257,6 +260,10 @@ function hitBomb(player, bomb) {
 
     gameOverText = this.add.text(320, 400, "Game Over", {
       fontSize: "100px",
+      fill: "aliceblue",
+    });
+    scoreAffiche = this.add.text(320, 480, "Score final:" + scoreFinal, {
+      fontSize: "60px",
       fill: "aliceblue",
     });
 

@@ -1,0 +1,36 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .gauche{
+    color: aliceblue;
+    margin-left: none;
+    background-color: aqua;
+
+  }
+
+  img{
+    z-index: +1;
+    position: absolute;
+    width: 75vw;
+    margin-top: 22vh;
+  }
+
+  .contour-jeu{
+    display: flex;
+    flex-direction: column-reverse;
+    width: 50vw;
+    height: 80vh;
+    border-radius: 10px;
+    margin-left: 6.7vh;
+
+    ul{
+      margin-left: 1vh;
+      font-size: 1.5em;
+    }
+  }
+}
