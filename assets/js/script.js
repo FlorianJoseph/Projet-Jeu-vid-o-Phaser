@@ -60,7 +60,7 @@ function create() {
 
   // crée les plateformes
   // plate = this.physics.add.staticGroup();
-  // plate.create(400, 500, "plateforme");
+  // plate.create(1000, 900, "plateforme");
 
   // ajoute le joueur et ses propriétés
   player = this.physics.add.sprite(100, 450, "perso").setScale(1.5);
