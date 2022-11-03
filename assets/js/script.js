@@ -28,10 +28,11 @@ var ring;
 
 var game = new Phaser.Game(config);
 
+// précharge les éléments
+
 function preload() {
   this.load.image("sky", "./assets/img/sky.png");
-  this.load.image("ground", "./assets/img/platform.png");
-  this.load.image("ground2", "./assets/img/platform2.png");
+  this.load.image("plateforme", "./assets/img/plateforme.png");
   this.load.spritesheet("item", "./assets/img/ring-sprite.png", {
     frameWidth: 115,
     frameHeight: 115,
@@ -46,33 +47,25 @@ function preload() {
     frameHeight: 122,
   });
 
-  // this.load.audio("dropItem", ["../sound/soundRing.mp3"]);
+  this.load.audio("dropItem", "./assets/sound/soundRing.mp3");
 }
 
+// crée les les éléments à afficher
+
 function create() {
-  //  A simple background for our game
+  //  ajoute le fond
   this.add.image(400, 300, "sky");
 
-  //  The platforms group contains the ground and the 2 ledges we can jump on
-  platforms = this.physics.add.staticGroup();
-  platforms2 = this.physics.add.staticGroup();
-
   //  crée le sol
-  platforms.create(700, 1100, "ground").setScale(2.5).refreshBody();
-  platforms2.create(700, 550, "ground2").setScale(3);
+  plateforme = this.physics.add.staticGroup();
+  plateforme.create(700, 950, "plateforme").setScale(1.8).refreshBody();
 
-// nouvelle plateforme
-  // platforms.create(1080, 800, "ground");
-  // platforms2.create(1080, 590, "ground2");
-
-  // The player and its settings
+  // ajoute le joueur et ses propriétés
   player = this.physics.add.sprite(100, 450, "dude").setScale(1.2);
-
-  //  Player physics properties. Give the little guy a slight bounce.
   player.setBounce(0.2);
   player.setCollideWorldBounds(true);
 
-  //  Our player animations, turning, walking left and walking right.
+  //  animations du personnage avec le sprite
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("dude2", { start: 0, end: 9 }),
@@ -93,10 +86,10 @@ function create() {
     repeat: -1,
   });
 
-  //  Input Events
+  //  evemement clavier
   cursors = this.input.keyboard.createCursorKeys();
 
-  //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
+  //  crée les items et ses propriétés
 
   items = this.physics.add.group({
     key: "item",
@@ -109,45 +102,66 @@ function create() {
 
   Phaser.Actions.RandomRectangle(items.getChildren(), this.cameras.main);
 
+  items.children.iterate(function (child) {
+    child.setCollideWorldBounds(true);
+    child.setScale(0.5);
+  });
+
+  // crée l'animation des items
+
   this.anims.create({
     key: "itemAnim",
     frames: this.anims.generateFrameNumbers("item", { start: 0, end: 9 }),
     repeat: -1,
   });
 
+  // crée la physique des bombes
+
   bombs = this.physics.add.group();
 
-  //  Affiche le scoore
+  //  Affiche le score avec un item au bout
   scoreText = this.add.text(16, 16, "score: 0", {
     fontSize: "32px",
     fill: "#000",
   });
 
-  this.physics.add.collider(player, platforms);
-  this.physics.add.collider(items, platforms);
-  this.physics.add.collider(bombs, platforms);
+  item = this.add.sprite(195, 30, "item").setScale(0.3);
+
+  // crée les collisions
+
+  this.physics.add.collider(player, plateforme);
+  this.physics.add.collider(items, plateforme);
+  this.physics.add.collider(bombs, plateforme);
   this.physics.add.overlap(player, items, collectItems, null, this);
   this.physics.add.collider(player, bombs, hitBomb, null, this);
-
-  item = this.add.sprite(195, 30, "item").setScale(0.3);
 }
+
+// crée les événements
 
 function update() {
   if (gameOver) {
     return;
   }
+
   // anime le personnage avec les déplacements vers le bas
+
   if (cursors.left.isDown) {
     player.setVelocityX(-160);
+
     // anime le personnage avec les déplacements vers la gauche
+
     player.anims.play("left", true);
   } else if (cursors.right.isDown) {
     player.setVelocityX(160);
+
     // anime le personnage avec les déplacements vers la droite
+
     player.anims.play("right", true);
   } else {
     player.setVelocityX(0);
+
     // image du personnage qui ne bouge pas
+
     player.anims.play("turn");
   }
 
@@ -155,15 +169,18 @@ function update() {
     player.setVelocityY(-330);
   }
 
-  // Anime les rings
+  // Anime les items
+
   items.children.iterate(function (child) {
     child.anims.play("itemAnim", true);
   });
 
+  // Anime l'item après le score
+
   item.anims.play("itemAnim", true);
 }
 
-// fonctionne qui collecte les rings
+// fonction qui collecte les items
 
 function collectItems(player, item) {
   item.disableBody(true, true);
@@ -174,18 +191,21 @@ function collectItems(player, item) {
   scoreText.setText("Score: " + score);
 
   if (items.countActive(true) === 0) {
-    // faire disparaitre les rings au ramassage
+    // faire disparaitre les items au ramassage
+
     items.children.iterate(function (child) {
       child.enableBody(true, child.x, 0, true, true);
     });
 
-    // fait apparaitre aléatoirement une bombe si il reste 0 rings
+    // fait apparaitre aléatoirement une bombe si il reste 0 items
+
     var x =
       player.x < 400
         ? Phaser.Math.Between(400, 800)
         : Phaser.Math.Between(0, 400);
 
-    // définit les propriétés de la bombre
+    // définit les propriétés de la bombe
+
     var bomb = bombs.create(x, 16, "bomb");
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
@@ -195,6 +215,7 @@ function collectItems(player, item) {
 }
 
 // fonction qui fait perdre quand on touche une bombe
+
 function hitBomb(player, bomb) {
   this.physics.pause();
 
