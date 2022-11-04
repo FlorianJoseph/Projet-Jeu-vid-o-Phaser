@@ -1,36 +1,47 @@
 body {
+  margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
 
-  .gauche{
+  .gauche {
     color: aliceblue;
-    margin-left: none;
-    background-color: aqua;
+    background-color: cornflowerblue;
+    width: 20vw;
+    padding: 2vh;
+    opacity: 80%;
 
-  }
-
-  img{
-    z-index: +1;
-    position: absolute;
-    width: 75vw;
-    margin-top: 22vh;
-  }
-
-  .contour-jeu{
-    display: flex;
-    flex-direction: column-reverse;
-    width: 50vw;
-    height: 80vh;
-    border-radius: 10px;
-    margin-left: 6.7vh;
-
-    ul{
+    ul {
       margin-left: 1vh;
       font-size: 1.5em;
     }
+
+  }
+
+  .tele {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .top {
+      color: aliceblue;
+      margin-left: none;
+      background-color: cornflowerblue;
+      width: 100%;
+      padding: 0.5vh;
+      opacity: 80%;
+    }
+
+    img {
+      z-index: +1;
+    }
+
+  }
+  .contour-jeu {
+    position: absolute;
+    margin-top: 7.9vh;
+    margin-left: 7.6vh;
+    width: 50%;
   }
 }
