@@ -1,47 +1,56 @@
+@font-face {
+  font-family: "titre";
+  src: url(../fonts/CAMPUS\ PERSONAL\ USE.ttf);
+}
+
+@font-face {
+  font-family: "text";
+  src: url(../fonts/collegeb.ttf);
+}
+
 body {
-  margin: 0;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-repeat: no-repeat;
   background-size: cover;
+  
+  .contour-jeu {
+    z-index: -5;
+    scale: 0.53;
+    margin-top: -11vh;
+    margin-left: -7.8vh;
+    border-radius: 100px;
+    opacity: 90%;
+  }
 
-  .gauche {
+  .top {
+    color: aliceblue;
+    margin-left: none;
+    padding: 0.5vh;
+    text-align: center;
+  }
+  .titre {
+    background-color: rgb(172, 113, 74);
+    margin-inline: 10vh;
+    font-size: 2.5rem;
+    border: double 10px black;
+    font-family: "titre";
+    padding-inline: 1vh;
+    opacity: 90%;
+  }
+
+  .bottom {
     color: aliceblue;
     background-color: cornflowerblue;
-    width: 20vw;
-    padding: 2vh;
-    opacity: 80%;
-
-    ul {
-      margin-left: 1vh;
-      font-size: 1.5em;
-    }
-
-  }
-
-  .tele {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-
-    .top {
-      color: aliceblue;
-      margin-left: none;
-      background-color: cornflowerblue;
-      width: 100%;
-      padding: 0.5vh;
-      opacity: 80%;
-    }
-
-    img {
-      z-index: +1;
-    }
-
-  }
-  .contour-jeu {
-    position: absolute;
-    margin-top: 7.9vh;
-    margin-left: 7.6vh;
-    width: 50%;
+    padding-inline: 3vh;
+    opacity: 90%;
+    font-size: 1.5rem;
+    background-color: rgb(172, 113, 74);
+    border: double 10px black;
+    font-family: "text";
+    margin-top: -10vh;
+    width: 60%;
   }
 }

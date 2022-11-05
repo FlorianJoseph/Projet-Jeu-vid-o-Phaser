@@ -227,7 +227,8 @@ function collectItems(player, item) {
     bomb.setScale(0.05);
     bomb.allowGravity = false;
   }
-}
+};
+
 // fonction qui fait perdre quand on touche une bombe
 function hitBomb(player, bomb) {
   bomb.disableBody(true, true);
@@ -269,5 +270,4 @@ function hitBomb(player, bomb) {
 
     gameOver = true;
   }
-  F;
 }
