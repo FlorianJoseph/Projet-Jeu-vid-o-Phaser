@@ -15,11 +15,11 @@ body {
   justify-content: center;
   background-repeat: no-repeat;
   background-size: cover;
-  
+
   .contour-jeu {
     z-index: -5;
     scale: 0.53;
-    margin-top: -11vh;
+    margin-top: -12.4vh;
     margin-left: -7.8vh;
     border-radius: 100px;
     opacity: 90%;
@@ -30,12 +30,12 @@ body {
     margin-left: none;
     padding: 0.5vh;
     text-align: center;
-    margin-left:10vh;
+    margin-left: 10vh;
   }
   .titre {
     background-color: rgb(172, 113, 74);
     margin-inline: 10vh;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     border: double 10px black;
     font-family: "titre";
     padding-inline: 1vh;
@@ -53,6 +53,6 @@ body {
     font-family: "text";
     margin-top: -10vh;
     width: 60%;
-    margin-left:10vh;
+    margin-left: 10vh;
   }
 }
