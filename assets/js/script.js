@@ -61,6 +61,10 @@ function create() {
   //  crée le sol
   plateforme = this.physics.add.staticGroup();
   plateforme.create(600, 1160, "plateforme-sol").setScale(1.8).refreshBody();
+  plateforme.create(600, 1260, "plateforme-sol").setScale(1.8).refreshBody();
+  plateforme.create(600, 1360, "plateforme-sol").setScale(1.8).refreshBody();
+  plateforme.create(600, 1460, "plateforme-sol").setScale(1.8).refreshBody();
+  plateforme.create(600, 1560, "plateforme-sol").setScale(1.8).refreshBody();
 
   // crée les plateformes
   // plate = this.physics.add.staticGroup();
